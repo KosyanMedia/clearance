@@ -112,6 +112,7 @@ module Clearance
         httponly: Clearance.configuration.httponly,
         path: Clearance.configuration.cookie_path,
         secure: Clearance.configuration.secure_cookie,
+        same_site: Clearance.configuration.same_site,
         value: remember_token
       }
 

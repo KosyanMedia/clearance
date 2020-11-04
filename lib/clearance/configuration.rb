@@ -8,6 +8,7 @@ module Clearance
       :cookie_name,
       :cookie_path,
       :httponly,
+      :same_site,
       :mailer_sender,
       :password_strategy,
       :redirect_url,
@@ -21,6 +22,7 @@ module Clearance
       @cookie_path = '/'
       @cookie_name = "remember_token"
       @httponly = false
+      @same_site = nil
       @mailer_sender = 'reply@example.com'
       @redirect_url = '/'
       @routes = true
