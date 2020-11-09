@@ -162,6 +162,23 @@ describe Clearance::Session do
 
     after { restore_default_config }
   end
+  
+  context 'if same_site is set' do
+    before do
+      Clearance.configuration.secure_cookie = true
+      Clearance.configuration.cookie_domain = '.example.com'
+      Clearance.configuration.same_site = 'None'
+      session.sign_in(user)
+    end
+
+    it 'sets a SameSite cookie' do
+      session.add_cookie_to_headers(headers)
+
+      expect(headers['Set-Cookie']).to match(/remember_token=.+; SameSite/)
+    end
+
+    after { restore_default_config }
+  end
 
   context 'if httponly is not set' do
     before do

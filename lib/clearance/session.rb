@@ -15,6 +15,23 @@ module Clearance
           remember_token_cookie,
           cookie_value
         )
+
+        if cookie_value[:same_site]
+          same_site =
+            case cookie_value[:same_site]
+            when false, nil
+              nil
+            when :none, 'None', :None
+              '; SameSite=None'
+            when :lax, 'Lax', :Lax
+              '; SameSite=Lax'
+            when true, :strict, 'Strict', :Strict
+              '; SameSite=Strict'
+            else
+              raise ArgumentError, "Invalid SameSite value: #{value[:same_site].inspect}"
+            end
+          headers['Set-Cookie'] = "#{headers['Set-Cookie']}#{same_site}"
+        end
       end
     end
 
@@ -110,9 +127,9 @@ module Clearance
       value = {
         expires: remember_token_expires,
         httponly: Clearance.configuration.httponly,
+        same_site: Clearance.configuration.same_site,
         path: Clearance.configuration.cookie_path,
         secure: Clearance.configuration.secure_cookie,
-        same_site: Clearance.configuration.same_site,
         value: remember_token
       }
 
